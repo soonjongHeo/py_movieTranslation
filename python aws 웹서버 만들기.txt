@@ -36,7 +36,6 @@ pythonpath = /home/ubuntu/.local/lib/python3.10/site-packages
 uwsgi -i uwsgi.ini 실행하면
 다른 새창으로 서버 접속하여 /home/ubuntu/uwsgi.sock파일이 만들어진것을 확인한다.
 그리고 tmp폴더로 가서 uwsgi.log파일을 확인후 여기서 트래킹을 한다( tail -f uwsgi.log )
-확인후 끊고,
 etc/nginx/sites-available/ 가서-> sudo vi default 내용 다 지우고,
 (
 
@@ -58,5 +57,7 @@ server {
 }
 
 )
-내용 복사 붙여넣기하고 저장하기
-
+내용 복사 붙여넣기하고 저장하기.
+uwsgi.ini는 실행되고 있어야함.
+sudo systemctl restart nginx
+중요한건 *ubuntu 폴더에 권한이 안되있으면 권한부족으로 에러남 방법은: sudo chmod 777 /home/ubuntu
