@@ -1,0 +1,62 @@
+python aws 웹서버 만들기
+
+aws 서버 접속후:
+git clone https://github.com/soonjongHeo/py_movieTranslation.git (해당 깃주소), 깃 다시 업데이트 받기(git pull)
+받으면 해당 폴더이동(프로젝트폴더)
+sudo apt update
+sudo apt install python3-pip -> Y
+pip install -r requirements.txt
+python3 manage.py migrate
+python3 manage.py runserver 0.0.0.0:8000 (aws 인바운드에서 8000포트 추가한다 0.0.0.0으로 전체가능하게 )
+웹사이트에서 http://3.39.239.80:8000/main/(퍼블릭 IPv4 주소)로 접속
+
+sudo pip3 install uwsgi
+uwsgi --http :8000 --module Jinstagram.wsgi (wsgi모듈있는 폴더)
+
+sudo apt-get install nginx -> Y
+systemctl status nginx (서버가 띄어있는지 확인 active(running) < 실행중)
+/home/ubuntu/ 에서 uwsgi.ini파일 생성후 내용 채우기
+( 
+
+[uwsgi]
+socket = /home/ubuntu/uwsgi.sock
+master = true
+processes = 1
+threads = 2
+chdir = /home/ubuntu/py_movieTranslation
+wsgi-file = Jinstagram/wsgi.py
+chmod-socket = 666
+vacuum = true
+
+logger = file:/tmp/uwsgi.log
+pythonpath = /home/ubuntu/.local/lib/python3.10/site-packages
+
+)
+
+uwsgi -i uwsgi.ini 실행하면
+다른 새창으로 서버 접속하여 /home/ubuntu/uwsgi.sock파일이 만들어진것을 확인한다.
+그리고 tmp폴더로 가서 uwsgi.log파일을 확인후 여기서 트래킹을 한다( tail -f uwsgi.log )
+확인후 끊고,
+etc/nginx/sites-available/ 가서-> sudo vi default 내용 다 지우고,
+(
+
+upstream django {
+    server unix:///home/ubuntu/uwsgi.sock;
+}
+
+server {
+    listen      80;
+    server_name localhost;
+    charset     utf-8;
+
+    client_max_body_size 80M;
+
+    location / {
+        uwsgi_pass django;
+        include    /etc/nginx/uwsgi_params;
+    }
+}
+
+)
+내용 복사 붙여넣기하고 저장하기
+
