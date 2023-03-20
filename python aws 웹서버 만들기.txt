@@ -93,3 +93,5 @@ docker로 mySql 설치
 속해있지않으면 추가한다: sudo usermod -aG docker $USER
 Docker 그룹에 사용자를 추가했으면 로그아웃 후 다시 로그인합니다. 이렇게 하면 Docker 그룹 권한이 적용됩니다: sudo docker run hello-world
 mysql 설치: sudo docker run --name mysql-db -p 3306:3306 -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_PASSWORD=1234 mysql
+MySQL 컨테이너 상태 확인: docker ps
+MySQL 컨테이너에 접속하려면 다음 명령어: docker exec -it mysql-db mysql -uroot -p
