@@ -95,3 +95,13 @@ Docker 그룹에 사용자를 추가했으면 로그아웃 후 다시 로그인�
 mysql 설치: sudo docker run --name mysql-db -p 3306:3306 -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_PASSWORD=1234 mysql
 MySQL 컨테이너 상태 확인: docker ps
 MySQL 컨테이너에 접속하려면 다음 명령어: docker exec -it mysql-db mysql -uroot -p
+
+mysql툴(DataGrip) 설치한다.
+DataGrip 같은경우 로그인하고 > 프로젝트생성 > 스키마 생성할 때 스키마 이름이 settings.py파일에 'NAME'과 동일해야함.
+그리고 aws에서 인바운드 3306포트도 만들어준다.
+커넥션 테스팅 완료후, 
+서버가서 sudo apt-get install python3-dev default-libmysqlclient-dev build-essential 설치하고,
+pip3 install mysqlclient 설치한다.
+그리고 python3 manage.py makemigrations, python3 manage.py migrate 두개 실행한다.
+ps aux | grep uwsgi 떠있는지 확인후 있으면 종료하고 다시 실행한다.
+uwsgi -d uwsgi.log -i uwsgi.ini
