@@ -61,3 +61,35 @@ server {
 uwsgi.ini는 실행되고 있어야함.
 sudo systemctl restart nginx
 중요한건 *ubuntu 폴더에 권한이 안되있으면 권한부족으로 에러남 방법은: sudo chmod 777 /home/ubuntu
+
+
+uwsgi 실행중 확인: ps aux | grep uwsgi
+uwsgi 실행중지: sudo killall -9 uwsgi
+-d uwsgi.log 옵션을 주면 로그파일이 생성과함께 백그라운드 실행 방법: uwsgi -d uwsgi.log -i uwsgi.ini
+
+
+
+
+ubuntu docker설치
+Ubuntu에서 Docker를 설치하는 방법은 다음과 같습니다.
+
+패키지 색인 업데이트
+sudo apt-get update
+Docker의 GPG 키 추가
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+Docker의 공식 저장소 추가
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+패키지 색인 업데이트
+sudo apt-get update
+Docker CE 설치
+sudo apt-get install docker-ce
+Docker가 제대로 설치되었는지 확인
+sudo docker run hello-world
+
+위 방법으로 Ubuntu에 Docker를 설치할 수 있습니다.
+
+docker로 mySql 설치
+먼저 그룹에 속해있는지 확인한다.: sudo groups
+속해있지않으면 추가한다: sudo usermod -aG docker $USER
+Docker 그룹에 사용자를 추가했으면 로그아웃 후 다시 로그인합니다. 이렇게 하면 Docker 그룹 권한이 적용됩니다: sudo docker run hello-world
+mysql 설치: sudo docker run --name mysql-db -p 3306:3306 -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_PASSWORD=1234 mysql
