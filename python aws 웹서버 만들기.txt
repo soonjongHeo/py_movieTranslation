@@ -57,10 +57,8 @@ server {
 }
 
 )
-내용 복사 붙여넣기하고 저장하기.
-uwsgi.ini는 실행되고 있어야함.
-sudo systemctl restart nginx
-중요한건 *ubuntu 폴더에 권한이 안되있으면 권한부족으로 에러남 방법은: sudo chmod 777 /home/ubuntu
+
+중요한건 *ubuntu 폴더에 권한이 안되있으면 권한부족으로 에러남 방법은: sudo chmod 705 ubuntu (home에서 실행)
 
 
 uwsgi 실행중 확인: ps aux | grep uwsgi
@@ -92,8 +90,19 @@ docker로 mySql 설치
 먼저 그룹에 속해있는지 확인한다.: sudo groups
 속해있지않으면 추가한다: sudo usermod -aG docker $USER
 Docker 그룹에 사용자를 추가했으면 로그아웃 후 다시 로그인합니다. 이렇게 하면 Docker 그룹 권한이 적용됩니다: sudo docker run hello-world
-mysql 설치: sudo docker run --name mysql-db -p 3306:3306 -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_PASSWORD=1234 mysql
+mysql 설치: sudo docker run --name mysql-db -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_PASSWORD=password mysql
+
+(docker: Error response from daemon: Conflict. The container name "mysql-db" is already in use by container 에러 발생시:
+docker 구동중에 위와 같이 에러가 발생 한다면
+mysql-db 을 중단 하고 삭제 재시작 하면 된다.
+docker ps -a
+구동 중인거 확인 하고
+docker stop mysql-db
+docker rm mysql-db
+다시 빌드)
+
 MySQL 컨테이너 상태 확인: docker ps
+구동중인거 확인: docker ps -a
 MySQL 컨테이너에 접속하려면 다음 명령어: docker exec -it mysql-db mysql -uroot -p
 
 mysql툴(DataGrip) 설치한다.
@@ -105,3 +114,19 @@ pip3 install mysqlclient 설치한다.
 그리고 python3 manage.py makemigrations, python3 manage.py migrate 두개 실행한다.
 ps aux | grep uwsgi 떠있는지 확인후 있으면 종료하고 다시 실행한다.
 uwsgi -d uwsgi.log -i uwsgi.ini
+
+
+aws RDS 설정
+Aurora(mysql)
+로그인 ID: admin
+pw: password
+
+설정완료하고 해당디비 인바운드 편집가서 0.0...(모든호환)으로 하고, 설명에 mysql로 수정함.
+그리고, 
+mysql툴(DataGrip) 설정
+새로 mysql로 선택하고, 이름 넣고 HOST에는: 해당 엔드포인트 넣는다: database-1-instance-1.chchecw6hs2p.ap-northeast-2.rds.amazonaws.com
+그리고 Driver: Amazon Aurora Mysql로 선택
+User: 마스터 사용자 이름(admin)
+pw: 마스터 암호(password)
+database: DB 이름(django_devops)
+Test Connection
