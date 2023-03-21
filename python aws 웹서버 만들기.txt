@@ -130,3 +130,24 @@ User: 마스터 사용자 이름(admin)
 pw: 마스터 암호(password)
 database: DB 이름(django_devops)
 Test Connection
+완료되면,
+Jinstagram폴더에 setting.py에서 
+(
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'database-1-instance-1.chchecw6hs2p.ap-northeast-2.rds.amazonaws.com',
+        'NAME': 'django_devops',
+        'USER': 'admin',
+        'PASSWORD': 'password',
+        'PORT': '3306',
+        'OPTIONS': {'charset': 'utf8mb4'},
+    }
+}
+)
+
+aws rds(mysql)로 설정 변경해준다.
+다시 git pull 받고,
+python3 manage.py makemigrations, python3 manage.py migrate 두개 실행한다.(해당 디비에 테이블 생성)
+mysql툴(DataGrip)에 테이블이 생성된거를 확인할 수있다.
+그럼 uwsgi -d uwsgi.log -i uwsgi.ini 서버실행
