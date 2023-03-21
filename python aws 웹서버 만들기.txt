@@ -115,8 +115,8 @@ pip3 install mysqlclient 설치한다.
 ps aux | grep uwsgi 떠있는지 확인후 있으면 종료하고 다시 실행한다.
 uwsgi -d uwsgi.log -i uwsgi.ini
 
-
-aws RDS 설정
+--------------------------------------------------------------------------------------------------------------
+aws RDS 설정 (*유로이기에 개인은 비권장)
 Aurora(mysql)
 로그인 ID: admin
 pw: password
